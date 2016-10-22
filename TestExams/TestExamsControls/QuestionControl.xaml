@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="TestExamsControls.UserControl1"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TestExamsControls"
+             xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" Width="826.667">
+
+    <StackPanel Orientation="Vertical" Margin="5" VerticalAlignment="Center">
+        <Label x:Name="Lab_question" FontSize="20" Padding="5" Margin="5">Prueba</Label>
+        <StackPanel Orientation="Horizontal">
+            <Button Style="{DynamicResource MetroCircleButtonStyle}" Height="40" Width="40" Content="A" FontSize="20"/>
+
+
+            <Label Name="lab_answer1"></Label>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Button Style="{DynamicResource MetroCircleButtonStyle}">B</Button>
+            <Label Name="lab_answer2"></Label>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Button Style="{DynamicResource MetroCircleButtonStyle}">C</Button>
+            <Label Name="lab_answer3"></Label>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Button Style="{DynamicResource MetroCircleButtonStyle}">D</Button>
+            <Label Name="lab_answer4"></Label>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

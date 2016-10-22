@@ -1,0 +1,84 @@
+﻿<Controls:MetroWindow x:Class="TestExams.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+         BorderThickness="0" 
+         GlowBrush="Black"
+         ResizeMode="CanResizeWithGrip"
+         WindowStartupLocation="CenterScreen"
+         WindowTransitionsEnabled="False"
+         Title="MainWindow" Height="670.045" Width="1146.171" Loaded="MetroWindow_Loaded">
+    <Controls:MetroWindow.RightWindowCommands>
+        <Controls:WindowCommands>
+            <!--Acceso directo a Login-->
+            <Button ToolTip="Login" Name="LoginButton" Click="LoginButton_Click">
+                <Rectangle Width="15" Height="15" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Uniform"
+                                     Visual="{StaticResource appbar_user}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+            <Button ToolTip="{Binding Tile_Config, Source={StaticResource TranslationRes}}" Name="LanguajeButton" Click="LanguajeButton_Click">
+                <Rectangle Width="15" Height="15" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Uniform"
+                                     Visual="{StaticResource appbar_chat}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+        </Controls:WindowCommands>
+    </Controls:MetroWindow.RightWindowCommands>
+    <Controls:MetroWindow.Flyouts>
+        <Controls:FlyoutsControl>
+            <Controls:Flyout Name="LogFlayout" Header="" Position="Right" Width="250" Theme="Accent">
+
+                <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Center">
+                    <Label>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Foreground="White" >
+                                <Rectangle Width="30" Height="30" Fill="{Binding RelativeSource={RelativeSource AncestorType=Label}, Path=Foreground}">
+                                    <Rectangle.OpacityMask>
+                                        <VisualBrush Stretch="Uniform"
+                                     Visual="{StaticResource appbar_user}" />
+                                    </Rectangle.OpacityMask>
+                                </Rectangle>
+                            </Label>
+                            <Label Content="{Binding Title_Session, Source={StaticResource TranslationRes}}" Foreground="White" FontSize="20" VerticalAlignment="Center"></Label>
+                        </StackPanel>
+                    </Label>
+                    <Label Foreground="White" Margin="0,5,0,5" FontSize="13" Content="{Binding lab_sesion, Source={StaticResource TranslationRes}}"/>
+                    <TextBox Name="tbxUser" Margin="5"></TextBox>
+                    <PasswordBox Name="tbxPassword" Margin="5"></PasswordBox>
+                    <Button Name="btnLogin" Margin="5" Content="{Binding Btn_InicioSesion, Source={StaticResource TranslationRes}}" Background="Snow" Style="{StaticResource MetroFlatButton}"></Button>
+                    <TextBlock HorizontalAlignment="Center" >
+                        <Hyperlink Name="Btn_PassLost" Click="Btn_PassLost_Click">
+                            <Label Content="{Binding Btn_PassLost, Source={StaticResource TranslationRes}}" Foreground="White"></Label>
+                        </Hyperlink>
+                    </TextBlock>
+                    <TextBlock HorizontalAlignment="Center" >
+                        <Hyperlink Name="Btn_signIn" Click="Btn_signIn_Click">
+                            <Label Content="{Binding Btn_signIn, Source={StaticResource TranslationRes}}" Foreground="White"></Label>
+                        </Hyperlink>
+                    </TextBlock>
+                </StackPanel>
+
+            </Controls:Flyout>
+            <Controls:Flyout Name="LanguajeFlayout" Header="{Binding Tile_Config, Source={StaticResource TranslationRes}}" Position="Right" Width="250" Theme="Accent" >
+                <StackPanel Orientation="Vertical" Margin="15">
+                    <Label Content="{Binding Lab_LenguajeSettings, Source={StaticResource TranslationRes}}" FontSize="15" Foreground="White" ></Label>
+                    <Label Content="{Binding Lab_SelectLenguaje, Source={StaticResource TranslationRes}}" Foreground="White" ></Label>
+                    <ComboBox Name="CbxLanguage" SelectionChanged="CbxLanguage_SelectionChanged">
+                        <ComboBoxItem Name="EsItem" Content="{Binding CbI_Castellano, Source={StaticResource TranslationRes}}" Selector.IsSelected="True"></ComboBoxItem>
+                        <ComboBoxItem Name="AsItem" Content="{Binding Cbl_Asturianu, Source={StaticResource TranslationRes}}"></ComboBoxItem>
+                    </ComboBox>
+                </StackPanel>
+            </Controls:Flyout>
+        </Controls:FlyoutsControl>
+    </Controls:MetroWindow.Flyouts>
+    <Grid Name="MainGrid">
+        <Button Click="Button_Click">add</Button>
+
+    </Grid>
+</Controls:MetroWindow>
