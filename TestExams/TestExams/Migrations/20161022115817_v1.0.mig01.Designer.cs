@@ -8,7 +8,7 @@ using TestExams.DBModel;
 namespace TestExams.Migrations
 {
     [DbContext(typeof(TestExamsContext))]
-    [Migration("20160925105659_v1.0.mig01")]
+    [Migration("20161022115817_v1.0.mig01")]
     partial class v10mig01
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -88,12 +88,28 @@ namespace TestExams.Migrations
                     b.ToTable("Exams");
                 });
 
+            modelBuilder.Entity("TestExams.DBModel.ExamQuestions", b =>
+                {
+                    b.Property<int>("ExamQuestionID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("ExamID");
+
+                    b.Property<int?>("QuestionID");
+
+                    b.HasKey("ExamQuestionID");
+
+                    b.HasIndex("ExamID");
+
+                    b.HasIndex("QuestionID");
+
+                    b.ToTable("ExamQuestions");
+                });
+
             modelBuilder.Entity("TestExams.DBModel.Question", b =>
                 {
                     b.Property<int>("QuestionID")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("ExamID");
 
                     b.Property<string>("QuestionText")
                         .IsRequired();
@@ -101,8 +117,6 @@ namespace TestExams.Migrations
                     b.Property<int?>("ThemeID");
 
                     b.HasKey("QuestionID");
-
-                    b.HasIndex("ExamID");
 
                     b.HasIndex("ThemeID");
 
@@ -117,7 +131,11 @@ namespace TestExams.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
+                    b.Property<int?>("UserID");
+
                     b.HasKey("SubjectID");
+
+                    b.HasIndex("UserID");
 
                     b.ToTable("Subjects");
                 });
@@ -185,15 +203,29 @@ namespace TestExams.Migrations
                         .HasForeignKey("UserID");
                 });
 
-            modelBuilder.Entity("TestExams.DBModel.Question", b =>
+            modelBuilder.Entity("TestExams.DBModel.ExamQuestions", b =>
                 {
-                    b.HasOne("TestExams.DBModel.Exam")
-                        .WithMany("Questions")
+                    b.HasOne("TestExams.DBModel.Exam", "Exam")
+                        .WithMany()
                         .HasForeignKey("ExamID");
 
+                    b.HasOne("TestExams.DBModel.Question", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionID");
+                });
+
+            modelBuilder.Entity("TestExams.DBModel.Question", b =>
+                {
                     b.HasOne("TestExams.DBModel.Theme", "Theme")
                         .WithMany()
                         .HasForeignKey("ThemeID");
+                });
+
+            modelBuilder.Entity("TestExams.DBModel.Subject", b =>
+                {
+                    b.HasOne("TestExams.DBModel.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID");
                 });
 
             modelBuilder.Entity("TestExams.DBModel.Theme", b =>

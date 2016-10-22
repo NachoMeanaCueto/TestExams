@@ -12,7 +12,6 @@ namespace TestExams.DBModel
         
         public virtual User User { get; set; }
 
-        public virtual List<Question> Questions { get; set; }
 
     }
 }

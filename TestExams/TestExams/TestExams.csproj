@@ -188,10 +188,11 @@
     <Compile Include="DBManager\DBResult.cs" />
     <Compile Include="DBModel\AppMail.cs" />
     <Compile Include="DBModel\Exam.cs" />
+    <Compile Include="DBModel\ExamQuestions.cs" />
     <Compile Include="DBModel\User.cs" />
-    <Compile Include="Migrations\20160925105659_v1.0.mig01.cs" />
-    <Compile Include="Migrations\20160925105659_v1.0.mig01.designer.cs">
-      <DependentUpon>20160925105659_v1.0.mig01.cs</DependentUpon>
+    <Compile Include="Migrations\20161022115817_v1.0.mig01.cs" />
+    <Compile Include="Migrations\20161022115817_v1.0.mig01.designer.cs">
+      <DependentUpon>20161022115817_v1.0.mig01.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\TestExamsContextModelSnapshot.cs" />
     <Compile Include="Translation\AsturianCulture.cs" />

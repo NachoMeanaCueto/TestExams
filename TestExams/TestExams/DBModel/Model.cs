@@ -19,6 +19,7 @@ namespace TestExams.DBModel
         public DbSet<Exam> Exams { get; set; }
         public DbSet<AppMail> AppMails { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<ExamQuestions> ExamQuestions { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -63,6 +64,7 @@ namespace TestExams.DBModel
             modelBuilder.Entity<Exam>().HasKey(x => x.ExamID);
             modelBuilder.Entity<Exam>().HasOne(x => x.User);
 
+            modelBuilder.Entity<ExamQuestions>().HasKey(x => x.ExamQuestionID);
         }
     }
 }
