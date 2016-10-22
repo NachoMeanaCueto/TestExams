@@ -13,5 +13,7 @@ namespace TestExams.DBModel
         public virtual Exam Exam { get; set; }
 
         public virtual Question Question { get; set; }
+
+        public bool Error { get; set; }
     }
 }

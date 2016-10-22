@@ -190,9 +190,9 @@
     <Compile Include="DBModel\Exam.cs" />
     <Compile Include="DBModel\ExamQuestions.cs" />
     <Compile Include="DBModel\User.cs" />
-    <Compile Include="Migrations\20161022115817_v1.0.mig01.cs" />
-    <Compile Include="Migrations\20161022115817_v1.0.mig01.designer.cs">
-      <DependentUpon>20161022115817_v1.0.mig01.cs</DependentUpon>
+    <Compile Include="Migrations\20161022121419_v1.0.mig01.cs" />
+    <Compile Include="Migrations\20161022121419_v1.0.mig01.designer.cs">
+      <DependentUpon>20161022121419_v1.0.mig01.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\TestExamsContextModelSnapshot.cs" />
     <Compile Include="Translation\AsturianCulture.cs" />
@@ -223,7 +223,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DBModel\Answer.cs" />
-    <Compile Include="DBModel\Error.cs" />
     <Compile Include="DBModel\Model.cs" />
     <Compile Include="DBModel\Question.cs" />
     <Compile Include="DBModel\Subjet.cs" />

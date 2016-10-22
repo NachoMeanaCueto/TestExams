@@ -15,7 +15,6 @@ namespace TestExams.DBModel
         public DbSet<Theme> Themes { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
-        public DbSet<Error> Errors { get; set; }
         public DbSet<Exam> Exams { get; set; }
         public DbSet<AppMail> AppMails { get; set; }
         public DbSet<User> Users { get; set; }
@@ -45,10 +44,6 @@ namespace TestExams.DBModel
             modelBuilder.Entity<Answer>().Property(x => x.AnswerText).IsRequired();
            // modelBuilder.Entity<Answer>().Property(x => x.Question).IsRequired();
             modelBuilder.Entity<Answer>().Property(x => x.isCorrect).IsRequired();
-
-            modelBuilder.Entity<Error>().HasKey(x => x.ErrorID);
-            modelBuilder.Entity<Error>().HasOne(x => x.Question);
-            modelBuilder.Entity<Error>().HasOne(x => x.Exam);
 
             modelBuilder.Entity<User>().HasKey(x => x.UserID);
             modelBuilder.Entity<User>().Property(x => x.UserName).IsRequired();

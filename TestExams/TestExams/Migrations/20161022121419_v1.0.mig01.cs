@@ -56,7 +56,7 @@ namespace TestExams.Migrations
                         column: x => x.UserID,
                         principalTable: "Users",
                         principalColumn: "UserID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -76,7 +76,7 @@ namespace TestExams.Migrations
                         column: x => x.UserID,
                         principalTable: "Users",
                         principalColumn: "UserID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -96,7 +96,7 @@ namespace TestExams.Migrations
                         column: x => x.SubjetSubjectID,
                         principalTable: "Subjects",
                         principalColumn: "SubjectID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -106,7 +106,7 @@ namespace TestExams.Migrations
                     QuestionID = table.Column<int>(nullable: false)
                         .Annotation("Autoincrement", true),
                     QuestionText = table.Column<string>(nullable: false),
-                    ThemeID = table.Column<int>(nullable: true)
+                    ThemeID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -116,7 +116,7 @@ namespace TestExams.Migrations
                         column: x => x.ThemeID,
                         principalTable: "Themes",
                         principalColumn: "ThemeID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -126,7 +126,7 @@ namespace TestExams.Migrations
                     AnswerId = table.Column<int>(nullable: false)
                         .Annotation("Autoincrement", true),
                     AnswerText = table.Column<string>(nullable: false),
-                    QuestionID = table.Column<int>(nullable: true),
+                    QuestionID = table.Column<int>(nullable: false),
                     isCorrect = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
@@ -137,33 +137,7 @@ namespace TestExams.Migrations
                         column: x => x.QuestionID,
                         principalTable: "Questions",
                         principalColumn: "QuestionID",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Errors",
-                columns: table => new
-                {
-                    ErrorID = table.Column<int>(nullable: false)
-                        .Annotation("Autoincrement", true),
-                    ExamID = table.Column<int>(nullable: true),
-                    QuestionID = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Errors", x => x.ErrorID);
-                    table.ForeignKey(
-                        name: "FK_Errors_Exams_ExamID",
-                        column: x => x.ExamID,
-                        principalTable: "Exams",
-                        principalColumn: "ExamID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Errors_Questions_QuestionID",
-                        column: x => x.QuestionID,
-                        principalTable: "Questions",
-                        principalColumn: "QuestionID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -172,8 +146,9 @@ namespace TestExams.Migrations
                 {
                     ExamQuestionID = table.Column<int>(nullable: false)
                         .Annotation("Autoincrement", true),
-                    ExamID = table.Column<int>(nullable: true),
-                    QuestionID = table.Column<int>(nullable: true)
+                    Error = table.Column<bool>(nullable: false),
+                    ExamID = table.Column<int>(nullable: false),
+                    QuestionID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -183,7 +158,7 @@ namespace TestExams.Migrations
                         column: x => x.ExamID,
                         principalTable: "Exams",
                         principalColumn: "ExamID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ExamQuestions_Questions_QuestionID",
                         column: x => x.QuestionID,
@@ -195,16 +170,6 @@ namespace TestExams.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Answers_QuestionID",
                 table: "Answers",
-                column: "QuestionID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Errors_ExamID",
-                table: "Errors",
-                column: "ExamID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Errors_QuestionID",
-                table: "Errors",
                 column: "QuestionID");
 
             migrationBuilder.CreateIndex(
@@ -245,9 +210,6 @@ namespace TestExams.Migrations
 
             migrationBuilder.DropTable(
                 name: "AppMails");
-
-            migrationBuilder.DropTable(
-                name: "Errors");
 
             migrationBuilder.DropTable(
                 name: "ExamQuestions");

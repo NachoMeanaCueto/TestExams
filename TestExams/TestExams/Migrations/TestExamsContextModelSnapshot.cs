@@ -55,24 +55,6 @@ namespace TestExams.Migrations
                     b.ToTable("AppMails");
                 });
 
-            modelBuilder.Entity("TestExams.DBModel.Error", b =>
-                {
-                    b.Property<int>("ErrorID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("ExamID");
-
-                    b.Property<int?>("QuestionID");
-
-                    b.HasKey("ErrorID");
-
-                    b.HasIndex("ExamID");
-
-                    b.HasIndex("QuestionID");
-
-                    b.ToTable("Errors");
-                });
-
             modelBuilder.Entity("TestExams.DBModel.Exam", b =>
                 {
                     b.Property<int>("ExamID")
@@ -91,6 +73,8 @@ namespace TestExams.Migrations
                 {
                     b.Property<int>("ExamQuestionID")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Error");
 
                     b.Property<int?>("ExamID");
 
@@ -179,17 +163,6 @@ namespace TestExams.Migrations
 
             modelBuilder.Entity("TestExams.DBModel.Answer", b =>
                 {
-                    b.HasOne("TestExams.DBModel.Question", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionID");
-                });
-
-            modelBuilder.Entity("TestExams.DBModel.Error", b =>
-                {
-                    b.HasOne("TestExams.DBModel.Exam", "Exam")
-                        .WithMany()
-                        .HasForeignKey("ExamID");
-
                     b.HasOne("TestExams.DBModel.Question", "Question")
                         .WithMany()
                         .HasForeignKey("QuestionID");
