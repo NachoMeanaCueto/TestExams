@@ -56,7 +56,7 @@ namespace TestExams.Migrations
                         column: x => x.UserID,
                         principalTable: "Users",
                         principalColumn: "UserID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -76,7 +76,7 @@ namespace TestExams.Migrations
                         column: x => x.UserID,
                         principalTable: "Users",
                         principalColumn: "UserID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -96,7 +96,7 @@ namespace TestExams.Migrations
                         column: x => x.SubjetSubjectID,
                         principalTable: "Subjects",
                         principalColumn: "SubjectID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -116,7 +116,7 @@ namespace TestExams.Migrations
                         column: x => x.ThemeID,
                         principalTable: "Themes",
                         principalColumn: "ThemeID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -137,7 +137,7 @@ namespace TestExams.Migrations
                         column: x => x.QuestionID,
                         principalTable: "Questions",
                         principalColumn: "QuestionID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -158,7 +158,7 @@ namespace TestExams.Migrations
                         column: x => x.ExamID,
                         principalTable: "Exams",
                         principalColumn: "ExamID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ExamQuestions_Questions_QuestionID",
                         column: x => x.QuestionID,
