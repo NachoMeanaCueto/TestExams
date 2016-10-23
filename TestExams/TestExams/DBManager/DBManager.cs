@@ -8,7 +8,7 @@ using TestExams.Translation;
 
 namespace TestExams.DBManager
 {
-    static class DBManager
+    public static class DBManager
     {
 
         #region usuarios
@@ -23,7 +23,7 @@ namespace TestExams.DBManager
         /// DBResult.result = true => usuario en uso
         /// DBResult.result = false => usuario sin uso
         /// </returns>
-        static DBResult addUser(User user)
+        public static DBResult addUser(User user)
         {
             DBResult Result = null;
 
@@ -84,9 +84,9 @@ namespace TestExams.DBManager
         /// DBResult.result = true => Borrado correctamente
         /// DBResult.result = false => No se pudo borrar
         /// </returns>
-        static DBResult RemoveUser(User user)
+        public static DBResult RemoveUser(User user)
         {
-            DBResult Result = null;
+            DBResult res = null;
 
             try
             {
@@ -94,7 +94,7 @@ namespace TestExams.DBManager
                 {
                     if (!db.Users.Select(x => x.UserID == user.UserID).Any())
                     {
-                        Result = new DBResult
+                        res = new DBResult
                         {
                             result = false,
                             message = WrapperTranslation.GetValue("Error_UserNotFound").ToString()
@@ -102,14 +102,19 @@ namespace TestExams.DBManager
                     }
                     else
                     {
-                        if((Result = IsUsed(user)).result)
+                        if((res = IsUsed(user)).result)
                         {
+                            res = new DBResult
+                            {
+                                result = false,
+                                message = res.message
+                            };
                         }
                         else
                         {
                             db.Users.Remove(user);
                             db.SaveChanges();
-                            Result = new DBResult
+                            res = new DBResult
                             {
                                 result = true,
                                 message = WrapperTranslation.GetValue("Message_RemoveUserOk").ToString()
@@ -121,14 +126,14 @@ namespace TestExams.DBManager
             }
             catch (Exception e)
             {
-                Result = new DBResult
+                res = new DBResult
                 {
                     result = false,
                     message = e.Message
                 };
             }
 
-            return Result;
+            return res;
         }
 
         /// <summary>
@@ -140,7 +145,7 @@ namespace TestExams.DBManager
         /// DBResult.result = true => usuario en uso
         /// DBResult.result = false => usuario sin uso
         /// </returns>
-        static DBResult IsUsed(User user)
+        public static DBResult IsUsed(User user)
         {
             DBResult Result = null;
 
@@ -190,8 +195,135 @@ namespace TestExams.DBManager
             return Result;
         }
 
-        //TODO borrar usuario en cascada
+        /// <summary>
+        /// Borra en cascada los registros vunculados a un usuario
+        /// </summary>
+        /// <param name="user">Objeto DB.User</param>
+        /// <returns>
+        /// objeto DBResult {bool result , string message}
+        /// DBResult.result = true => Referencias borradas correctamente
+        /// DBResult.result = false => Error
+        /// </returns>
+        public static DBResult RemoveUserReferences(User user)
+        {
+            DBResult result = null;
+            try
+            {
+                using (var db = new TestExamsContext())
+                {
+                    var exams = db.Exams.Where(x => x.User.UserID == user.UserID);
 
+                    foreach (var exam in exams)
+                    {
+                        var examquestions = db.ExamQuestions.Where(x => x.Exam.ExamID == exam.ExamID);
+                        foreach (var examQuestion in examquestions)
+                        {
+                            db.ExamQuestions.Remove(examQuestion);
+                            db.SaveChanges();
+                        }
+
+                        db.Exams.Remove(exam);
+                        db.SaveChanges();
+                    }
+
+                    var subjets = db.Subjects.Where(x => x.User.UserID == user.UserID);
+                    foreach (var subjet in subjets)
+                    {
+                        var themes = db.Themes.Where(x => x.Subjet.SubjectID == subjet.SubjectID);
+
+                        foreach (var theme in themes)
+                        {
+                            var questions = db.Questions.Where(x => x.Theme.ThemeID == theme.ThemeID);
+
+                            foreach (var question in questions)
+                            {
+                                var answers = db.Answers.Where(x => x.Question.QuestionID == question.QuestionID);
+
+                                foreach (var answer in answers)
+                                {
+                                    db.Answers.Remove(answer);
+                                    db.SaveChanges();
+                                }
+
+                                db.Questions.Remove(question);
+                                db.SaveChanges();
+                            }
+
+                            db.Themes.Remove(theme);
+                            db.SaveChanges();
+                        }
+                    }
+
+                    result = new DBResult
+                    {
+                        result = true,
+                    };
+                }
+            }
+            catch (Exception e)
+            {
+                result = new DBResult
+                {
+                    result = false,
+                    message = e.Message
+                };
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Borra el usuario y sus referencias
+        /// </summary>
+        /// <param name="user">Objeto DB.User</param>
+        /// <returns></returns>
+        public static DBResult RemoveUserAndReferences(User user)
+        {
+            DBResult Result = null;
+            try
+            {
+                var RemoveUserReferencesResult = RemoveUserReferences(user);
+                if (RemoveUserReferencesResult.result)
+                {
+                    var RemoveUserResult = RemoveUser(user);
+                  if (RemoveUserResult.result)
+                    {
+                        Result = new DBResult
+                        {
+                            result = true,
+                            message = RemoveUserResult.message
+                        };
+                    }
+                    else
+                    {
+                        Result = new DBResult
+                        {
+                            result = false,
+                            message = RemoveUserResult.message
+                        };
+                    }
+                }
+                else
+                {
+                    Result = new DBResult
+                    {
+                        result = false,
+                        message = RemoveUserReferencesResult.message
+                    };
+                }
+ 
+            }
+            catch(Exception e)
+            {
+                Result = new DBResult
+                {
+                    result = false,
+                    message = e.Message
+                };
+            }
+
+            return Result;
+        }
         #endregion
 
         #region Asignaturas
