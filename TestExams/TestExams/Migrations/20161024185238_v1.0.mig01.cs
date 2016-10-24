@@ -46,7 +46,7 @@ namespace TestExams.Migrations
                 {
                     ExamID = table.Column<int>(nullable: false)
                         .Annotation("Autoincrement", true),
-                    UserID = table.Column<int>(nullable: true)
+                    UserID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -56,7 +56,7 @@ namespace TestExams.Migrations
                         column: x => x.UserID,
                         principalTable: "Users",
                         principalColumn: "UserID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -66,7 +66,7 @@ namespace TestExams.Migrations
                     SubjectID = table.Column<int>(nullable: false)
                         .Annotation("Autoincrement", true),
                     Name = table.Column<string>(nullable: false),
-                    UserID = table.Column<int>(nullable: true)
+                    UserID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -76,7 +76,7 @@ namespace TestExams.Migrations
                         column: x => x.UserID,
                         principalTable: "Users",
                         principalColumn: "UserID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -86,7 +86,7 @@ namespace TestExams.Migrations
                     ThemeID = table.Column<int>(nullable: false)
                         .Annotation("Autoincrement", true),
                     Name = table.Column<string>(nullable: false),
-                    SubjetSubjectID = table.Column<int>(nullable: true)
+                    SubjetSubjectID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -96,7 +96,7 @@ namespace TestExams.Migrations
                         column: x => x.SubjetSubjectID,
                         principalTable: "Subjects",
                         principalColumn: "SubjectID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -116,7 +116,7 @@ namespace TestExams.Migrations
                         column: x => x.ThemeID,
                         principalTable: "Themes",
                         principalColumn: "ThemeID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -137,7 +137,7 @@ namespace TestExams.Migrations
                         column: x => x.QuestionID,
                         principalTable: "Questions",
                         principalColumn: "QuestionID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -158,7 +158,7 @@ namespace TestExams.Migrations
                         column: x => x.ExamID,
                         principalTable: "Exams",
                         principalColumn: "ExamID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ExamQuestions_Questions_QuestionID",
                         column: x => x.QuestionID,

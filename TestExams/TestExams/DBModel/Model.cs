@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-
-
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace TestExams.DBModel
 {
@@ -23,26 +23,32 @@ namespace TestExams.DBModel
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+
+            //var connection = new SqliteConnection("data source =TextExamsBD.db, EnforceFKConstraints=Yes|True|1");
             optionsBuilder.UseSqlite("Filename=TextExamsBD.db");
+            //optionsBuilder.UseSqlite(connection);
+
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Subject>().HasKey(x => x.SubjectID);
             modelBuilder.Entity<Subject>().Property(x => x.Name).IsRequired();
+            modelBuilder.Entity<Subject>().HasOne(x => x.User).WithMany().OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Theme>().HasKey(x => x.ThemeID);
             modelBuilder.Entity<Theme>().Property(x => x.Name).IsRequired();
-            //modelBuilder.Entity<Theme>().HasOne(x => x.Subjet);
+            modelBuilder.Entity<Theme>().HasOne(x => x.Subjet).WithMany().OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Question>().HasKey(x => x.QuestionID);
             modelBuilder.Entity<Question>().Property(x => x.QuestionText).IsRequired();
-           // modelBuilder.Entity<Question>().Property(x => x.Theme).IsRequired();
+            modelBuilder.Entity<Question>().HasOne(x => x.Theme).WithMany().OnDelete(DeleteBehavior.Cascade);
 
 
             modelBuilder.Entity<Answer>().HasKey(x => x.AnswerId);
             modelBuilder.Entity<Answer>().Property(x => x.AnswerText).IsRequired();
-           // modelBuilder.Entity<Answer>().Property(x => x.Question).IsRequired();
+            modelBuilder.Entity<Answer>().HasOne(x => x.Question).WithMany().OnDelete(DeleteBehavior.Cascade); ;
             modelBuilder.Entity<Answer>().Property(x => x.isCorrect).IsRequired();
 
             modelBuilder.Entity<User>().HasKey(x => x.UserID);
@@ -57,9 +63,12 @@ namespace TestExams.DBModel
             modelBuilder.Entity<AppMail>().Property(x => x.port).IsRequired();
 
             modelBuilder.Entity<Exam>().HasKey(x => x.ExamID);
-            modelBuilder.Entity<Exam>().HasOne(x => x.User);
+            modelBuilder.Entity<Exam>().HasOne(x => x.User).WithMany().OnDelete(DeleteBehavior.Cascade); 
 
             modelBuilder.Entity<ExamQuestions>().HasKey(x => x.ExamQuestionID);
+            modelBuilder.Entity<ExamQuestions>().HasOne(x => x.Exam).WithMany().OnDelete(DeleteBehavior.Cascade);
         }
+
+        
     }
 }

@@ -165,21 +165,24 @@ namespace TestExams.Migrations
                 {
                     b.HasOne("TestExams.DBModel.Question", "Question")
                         .WithMany()
-                        .HasForeignKey("QuestionID");
+                        .HasForeignKey("QuestionID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("TestExams.DBModel.Exam", b =>
                 {
                     b.HasOne("TestExams.DBModel.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserID");
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("TestExams.DBModel.ExamQuestions", b =>
                 {
                     b.HasOne("TestExams.DBModel.Exam", "Exam")
                         .WithMany()
-                        .HasForeignKey("ExamID");
+                        .HasForeignKey("ExamID")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("TestExams.DBModel.Question", "Question")
                         .WithMany()
@@ -190,21 +193,24 @@ namespace TestExams.Migrations
                 {
                     b.HasOne("TestExams.DBModel.Theme", "Theme")
                         .WithMany()
-                        .HasForeignKey("ThemeID");
+                        .HasForeignKey("ThemeID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("TestExams.DBModel.Subject", b =>
                 {
                     b.HasOne("TestExams.DBModel.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserID");
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("TestExams.DBModel.Theme", b =>
                 {
                     b.HasOne("TestExams.DBModel.Subject", "Subjet")
                         .WithMany()
-                        .HasForeignKey("SubjetSubjectID");
+                        .HasForeignKey("SubjetSubjectID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
         }
     }
