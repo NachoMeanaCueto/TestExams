@@ -183,4 +183,10 @@
   <data name="Message_UserNotInUse" xml:space="preserve">
     <value>l'usuariu nun ta n'usu</value>
   </data>
+  <data name="Error_ThemeRepeat" xml:space="preserve">
+    <value>Erru, esiste un tema col mesmu nome</value>
+  </data>
+  <data name="Message_AddThemeOk" xml:space="preserve">
+    <value>El tema añadiose correutamente</value>
+  </data>
 </root>

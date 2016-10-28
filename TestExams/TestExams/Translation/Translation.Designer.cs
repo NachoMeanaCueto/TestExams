@@ -124,6 +124,15 @@ namespace TestExams.Translation {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Error, existe un tema con el mismo nombre..
+        /// </summary>
+        public static string Error_ThemeRepeat {
+            get {
+                return ResourceManager.GetString("Error_ThemeRepeat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Error, el usuario no se puede borrar porque está siendo usado.
         /// </summary>
         public static string Error_UserInUse {
@@ -183,6 +192,15 @@ namespace TestExams.Translation {
         public static string Message_AddSubjetOk {
             get {
                 return ResourceManager.GetString("Message_AddSubjetOk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El tema se ha añadido correctamente..
+        /// </summary>
+        public static string Message_AddThemeOk {
+            get {
+                return ResourceManager.GetString("Message_AddThemeOk", resourceCulture);
             }
         }
         

@@ -76,7 +76,7 @@ namespace TestExams.DBManager
 
         /// <summary>
         /// Borra un usuario de la base de datos.
-        /// Comprueba la existencia del usuario y si este está en uso.
+        /// Comprueba la existencia del usuario.
         /// </summary>
         /// <param name="user"> Objeto DB.User</param>
         /// <returns>
@@ -102,26 +102,14 @@ namespace TestExams.DBManager
                     }
                     else
                     {
-                        if((res = IsUsed(user)).result)
+                        db.Users.Remove(user);
+                        db.SaveChanges();
+                        res = new DBResult
                         {
-                            res = new DBResult
-                            {
-                                result = false,
-                                message = res.message
-                            };
-                        }
-                        else
-                        {
-                            db.Users.Remove(user);
-                            db.SaveChanges();
-                            res = new DBResult
-                            {
-                                result = true,
-                                message = WrapperTranslation.GetValue("Message_RemoveUserOk").ToString()
-                            };
-                        }
-
-                    }
+                            result = true,
+                            message = WrapperTranslation.GetValue("Message_RemoveUserOk").ToString()
+                        };
+                    } 
                 }
             }
             catch (Exception e)
@@ -324,6 +312,15 @@ namespace TestExams.DBManager
 
             return Result;
         }
+
+        /// <summary>
+        /// Devuelve el usuario en sesión
+        /// </summary>
+        /// <returns>Objeto DB.User</returns>
+        public static User GetCurrentUser()
+        {
+            return App.CurrentUser;
+        }
         #endregion
 
         #region Asignaturas
@@ -385,7 +382,169 @@ namespace TestExams.DBManager
         #endregion
 
         #region Temas
-        //TODO acabar temas
+
+        /// <summary>
+        /// Añade un tema a la base de datos.
+        /// Comprueba que no esté repetido.
+        /// </summary>
+        /// <param name="theme"> Objeto DB.Theme</param>
+        /// <returns>
+        /// objeto DBResult {bool result , string message}
+        /// DBResult.result = true => Accion correcta
+        /// DBResult.result = false => Accion incorrecta
+        /// </returns>
+        public static DBResult addTheme(Theme theme)
+        {
+            DBResult Result = null;
+
+            try
+            {
+                using (var db = new TestExamsContext())
+                {
+                    if (db.Themes.Select(x => x.Name == theme.Name && x.Subjet.User.UserID == GetCurrentUser().UserID).Any())
+                    {
+                        Result = new DBResult
+                        {
+                            result = false,
+                            message = WrapperTranslation.GetValue("Error_ThemeRepeat").ToString()
+                        };
+                    }
+                    else
+                    {
+
+                       db.Themes.Add(theme);
+                       db.SaveChanges();
+                        Result = new DBResult
+                        {
+                            result = true,
+                            message = WrapperTranslation.GetValue("Message_AddThemeOk").ToString()
+                        };
+                        
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Result = new DBResult
+                {
+                    result = false,
+                    message = e.Message
+                };
+            }
+
+            return Result;
+        }
+
+        /// <summary>
+        /// Borra un tema de la base de datos.
+        /// Comprueba la existencia.
+        /// </summary>
+        /// <param name="user"> Objeto DB.theme</param>
+        /// <returns>
+        /// objeto DBResult {bool result , string message}
+        /// DBResult.result = true => Borrado correctamente
+        /// DBResult.result = false => No se pudo borrar
+        /// </returns>
+        public static DBResult RemoveTheme(Theme theme)
+        {
+            DBResult res = null;
+
+            try
+            {
+                using (var db = new TestExamsContext())
+                {
+                    if (!db.Themes.Select(x => x.ThemeID == theme.ThemeID).Any())
+                    {
+                        res = new DBResult
+                        {
+                            result = false,
+                            message = WrapperTranslation.GetValue("Error_UserNotFound").ToString()
+                        };
+                    }
+                    else
+                    {
+                        db.Themes.Remove(theme);
+                        db.SaveChanges();
+                        res = new DBResult
+                        {
+                            result = true,
+                            message = WrapperTranslation.GetValue("Message_RemoveUserOk").ToString()
+                        };
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                res = new DBResult
+                {
+                    result = false,
+                    message = e.Message
+                };
+            }
+
+            return res;
+        }
+
+        /// <summary>
+        /// Comprueba si el usuario está en uso
+        /// </summary>
+        /// <param name="user">Objeto DB.User</param>
+        /// <returns>        
+        /// objeto DBResult {bool result , string message}
+        /// DBResult.result = true => usuario en uso
+        /// DBResult.result = false => usuario sin uso
+        /// </returns>
+        public static DBResult IsUsed(Theme theme)
+        {
+            DBResult Result = null;
+
+            //try
+            //{
+            //    using (var db = new TestExamsContext())
+            //    {
+            //        if (!db.Users.Select(x => x.UserID == user.UserID).Any())
+            //        {
+            //            Result = new DBResult
+            //            {
+            //                result = true,
+            //                message = WrapperTranslation.GetValue("Error_UserNotFound").ToString()
+            //            };
+            //        }
+            //        else
+            //        {
+            //            if (db.Subjects.Select(x => x.User.UserID == user.UserID).Any()
+            //                || db.Exams.Select(x => x.User.UserID == user.UserID).Any())
+            //            {
+            //                Result = new DBResult
+            //                {
+            //                    result = true,
+            //                    message = WrapperTranslation.GetValue("Error_UserInUse").ToString()
+            //                };
+            //            }
+            //            else
+            //            {
+            //                Result = new DBResult
+            //                {
+            //                    result = false,
+            //                    message = WrapperTranslation.GetValue("Message_UserNotInUse").ToString()
+            //                };
+            //            }
+            //        }
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+            //    Result = new DBResult
+            //    {
+            //        result = true,
+            //        message = e.Message
+            //    };
+            //}
+
+            return Result;
+        }
+
+
         #endregion
     }
 }

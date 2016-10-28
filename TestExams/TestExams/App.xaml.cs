@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using TestExams.DBModel;
 
 namespace TestExams
 {
@@ -13,6 +14,8 @@ namespace TestExams
     /// </summary>
     public partial class App : Application
     {
+        public static User CurrentUser { get; set; }
+
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             using (var db = new DBModel.TestExamsContext())

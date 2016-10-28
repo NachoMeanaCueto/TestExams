@@ -180,4 +180,10 @@
   <data name="Message_UserNotInUse" xml:space="preserve">
     <value>El usuario no esta en uso</value>
   </data>
+  <data name="Error_ThemeRepeat" xml:space="preserve">
+    <value>Error, existe un tema con el mismo nombre.</value>
+  </data>
+  <data name="Message_AddThemeOk" xml:space="preserve">
+    <value>El tema se ha añadido correctamente.</value>
+  </data>
 </root>
