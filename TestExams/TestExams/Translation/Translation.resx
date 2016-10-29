@@ -157,7 +157,7 @@
     <value>Error, existe una asignatura con el mismo nombre</value>
   </data>
   <data name="Error_UserInUse" xml:space="preserve">
-    <value>Error, el usuario no se puede borrar porque está siendo usado</value>
+    <value>El usuario está siendo usado</value>
   </data>
   <data name="Error_UserNotFound" xml:space="preserve">
     <value>Error, el usuario no existe</value>
@@ -185,5 +185,11 @@
   </data>
   <data name="Message_AddThemeOk" xml:space="preserve">
     <value>El tema se ha añadido correctamente.</value>
+  </data>
+  <data name="Error_SubjetInUse" xml:space="preserve">
+    <value>La asignatura está siendo usada</value>
+  </data>
+  <data name="Message_SubjetNotInUse" xml:space="preserve">
+    <value>La asignatura no está en uso</value>
   </data>
 </root>

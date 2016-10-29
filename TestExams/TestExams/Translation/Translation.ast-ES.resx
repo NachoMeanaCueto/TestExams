@@ -160,7 +160,7 @@
     <value>Erru, esiste una asignatura col mesmu nome</value>
   </data>
   <data name="Error_UserInUse" xml:space="preserve">
-    <value>Erru, l'usuariu nun pue borrarse porque ta n'usu</value>
+    <value>l'usuariu ta n'usu</value>
   </data>
   <data name="Error_UserNotFound" xml:space="preserve">
     <value>Erru, l'usuariu nun esiste</value>
@@ -188,5 +188,11 @@
   </data>
   <data name="Message_AddThemeOk" xml:space="preserve">
     <value>El tema añadiose correutamente</value>
+  </data>
+  <data name="Error_SubjetInUse" xml:space="preserve">
+    <value>l'asignatura ta n'usu</value>
+  </data>
+  <data name="Message_SubjetNotInUse" xml:space="preserve">
+    <value>l'asignatura nun ta n'usu</value>
   </data>
 </root>

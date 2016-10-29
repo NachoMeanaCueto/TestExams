@@ -115,6 +115,15 @@ namespace TestExams.Translation {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a La asignatura está siendo usada.
+        /// </summary>
+        public static string Error_SubjetInUse {
+            get {
+                return ResourceManager.GetString("Error_SubjetInUse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Error, existe una asignatura con el mismo nombre.
         /// </summary>
         public static string Error_SubjetRepeat {
@@ -133,7 +142,7 @@ namespace TestExams.Translation {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Error, el usuario no se puede borrar porque está siendo usado.
+        ///   Busca una cadena traducida similar a El usuario está siendo usado.
         /// </summary>
         public static string Error_UserInUse {
             get {
@@ -228,6 +237,15 @@ namespace TestExams.Translation {
         public static string Message_RemoveUserOk {
             get {
                 return ResourceManager.GetString("Message_RemoveUserOk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a La asignatura no está en uso.
+        /// </summary>
+        public static string Message_SubjetNotInUse {
+            get {
+                return ResourceManager.GetString("Message_SubjetNotInUse", resourceCulture);
             }
         }
         

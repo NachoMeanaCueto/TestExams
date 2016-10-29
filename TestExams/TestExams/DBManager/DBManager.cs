@@ -335,7 +335,7 @@ namespace TestExams.DBManager
         /// DBResult.result = true => Asignatura añadida correctamente
         /// DBResult.result = false => Asignatura no añadida
         /// </returns>
-        static DBResult addSubjet(Subject subject)
+        static DBResult AddSubjet(Subject subject)
         {
             DBResult Result = null;
 
@@ -377,8 +377,121 @@ namespace TestExams.DBManager
             return Result;
         }
 
-        //TODO acabar asignaturas
+        /// <summary>
+        /// Borra un tema de la base de datos.
+        /// Comprueba la existencia.
+        /// </summary>
+        /// <param name="user"> Objeto DB.theme</param>
+        /// <returns>
+        /// objeto DBResult {bool result , string message}
+        /// DBResult.result = true => Borrado correctamente
+        /// DBResult.result = false => No se pudo borrar
+        /// </returns>
+        public static DBResult RemoveSUbjet(Subject subject)
+        {
+            DBResult res = null;
 
+            try
+            {
+                using (var db = new TestExamsContext())
+                {
+                    if (!db.Subjects.Select(x => x.SubjectID == subject.SubjectID).Any())
+                    {
+                        res = new DBResult
+                        {
+                            result = false,
+                            message = WrapperTranslation.GetValue("Error_SubjetNotFound").ToString()
+                        };
+                    }
+                    else
+                    {
+                        db.Subjects.Remove(subject);
+                        db.SaveChanges();
+                        res = new DBResult
+                        {
+                            result = true,
+                            message = WrapperTranslation.GetValue("Message_RemoveSubjetOk").ToString()
+                        };
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                res = new DBResult
+                {
+                    result = false,
+                    message = e.Message
+                };
+            }
+
+            return res;
+        }
+
+        /// <summary>
+        /// Comprueba si la asignatura está en uso
+        /// </summary>
+        /// <param name="user">Objeto DB.Subjet</param>
+        /// <returns>        
+        /// objeto DBResult {bool result , string message}
+        /// DBResult.result = true => asignatura en uso
+        /// DBResult.result = false => asignatura sin uso
+        /// </returns>
+        public static DBResult IsUsed(Subject subjet)
+        {
+            DBResult Result = null;
+
+            try
+            {
+                using (var db = new TestExamsContext())
+                {
+                    if (!db.Subjects.Select(x => x.SubjectID == subjet.SubjectID).Any())
+                    {
+                        Result = new DBResult
+                        {
+                            result = true,
+                            message = WrapperTranslation.GetValue("Error_SubjetNotFound").ToString()
+                        };
+                    }
+                    else
+                    {
+                        if (db.Themes.Select(x => x.Subjet.SubjectID == subjet.SubjectID).Any())
+                        {
+                            Result = new DBResult
+                            {
+                                result = true,
+                                message = WrapperTranslation.GetValue("Error_SubjetInUse").ToString()
+                            };
+                        }
+                        else
+                        {
+                            Result = new DBResult
+                            {
+                                result = false,
+                                message = WrapperTranslation.GetValue("Message_SubjetNotInUse").ToString()
+                            };
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Result = new DBResult
+                {
+                    result = true,
+                    message = e.Message
+                };
+            }
+
+            return Result;
+        }
+
+        public static IEnumerable<Subject> GetSubjetsByCurrentUser()
+        {
+            using (var db = new TestExamsContext())
+            {
+                return db.Subjects.Where(x => x.User.UserID == GetCurrentUser().UserID);
+            }
+        }
         #endregion
 
         #region Temas
