@@ -10,8 +10,33 @@ namespace TestExams.DBManager
 {
     public static class DBManager
     {
+        #region  AppMail
 
-        #region usuarios
+        public static void SetAppMail()
+        {
+            using (var db = new TestExamsContext())
+            {
+                var appMail = db.AppMails.Count();
+
+                if (appMail == 0)
+                {
+                    db.AppMails.Add(new AppMail
+                    {
+                        AppMailID = 1,
+                        Host = "smtp.gmail.com",
+                        port = 25,
+                        MailAddress = "textexams@gmail.com",
+                        Password = "dABlAHgAdABlAHgAYQBtAHMAQQBkAG0AaQBuACEAMQAyADMANAA="
+                    });
+
+                    db.SaveChanges();
+                }
+            }
+        }
+
+        #endregion
+
+        #region Users
 
         /// <summary>
         /// Añade un usuario a la base de datos.
@@ -323,7 +348,7 @@ namespace TestExams.DBManager
         }
         #endregion
 
-        #region Asignaturas
+        #region Subjets
 
         /// <summary>
         /// Añade una asignatura a la base de datos.
@@ -494,7 +519,8 @@ namespace TestExams.DBManager
         }
         #endregion
 
-        #region Temas
+        // TODO translates
+        #region Themes
 
         /// <summary>
         /// Añade un tema a la base de datos.
@@ -571,7 +597,7 @@ namespace TestExams.DBManager
                         res = new DBResult
                         {
                             result = false,
-                            message = WrapperTranslation.GetValue("Error_UserNotFound").ToString()
+                            message = WrapperTranslation.GetValue("Error_ThemeNotFound").ToString()
                         };
                     }
                     else
@@ -581,7 +607,7 @@ namespace TestExams.DBManager
                         res = new DBResult
                         {
                             result = true,
-                            message = WrapperTranslation.GetValue("Message_RemoveUserOk").ToString()
+                            message = WrapperTranslation.GetValue("Message_RemoveThemeOk").ToString()
                         };
                     }
                 }
@@ -599,9 +625,9 @@ namespace TestExams.DBManager
         }
 
         /// <summary>
-        /// Comprueba si el usuario está en uso
+        /// Comprueba si el tema está en uso
         /// </summary>
-        /// <param name="user">Objeto DB.User</param>
+        /// <param name="user">Objeto DB.theme</param>
         /// <returns>        
         /// objeto DBResult {bool result , string message}
         /// DBResult.result = true => usuario en uso
@@ -611,53 +637,252 @@ namespace TestExams.DBManager
         {
             DBResult Result = null;
 
-            //try
-            //{
-            //    using (var db = new TestExamsContext())
-            //    {
-            //        if (!db.Users.Select(x => x.UserID == user.UserID).Any())
-            //        {
-            //            Result = new DBResult
-            //            {
-            //                result = true,
-            //                message = WrapperTranslation.GetValue("Error_UserNotFound").ToString()
-            //            };
-            //        }
-            //        else
-            //        {
-            //            if (db.Subjects.Select(x => x.User.UserID == user.UserID).Any()
-            //                || db.Exams.Select(x => x.User.UserID == user.UserID).Any())
-            //            {
-            //                Result = new DBResult
-            //                {
-            //                    result = true,
-            //                    message = WrapperTranslation.GetValue("Error_UserInUse").ToString()
-            //                };
-            //            }
-            //            else
-            //            {
-            //                Result = new DBResult
-            //                {
-            //                    result = false,
-            //                    message = WrapperTranslation.GetValue("Message_UserNotInUse").ToString()
-            //                };
-            //            }
-            //        }
-            //    }
-            //}
-            //catch (Exception e)
-            //{
-            //    Result = new DBResult
-            //    {
-            //        result = true,
-            //        message = e.Message
-            //    };
-            //}
+            try
+            {
+                using (var db = new TestExamsContext())
+                {
+                    if (!db.Themes.Select(x => x.ThemeID == theme.ThemeID).Any())
+                    {
+                        Result = new DBResult
+                        {
+                            result = true,
+                            message = WrapperTranslation.GetValue("").ToString()// Error, el tema no existe
+                        };
+                    }
+                    else
+                    {
+                        if (db.Questions.Select(x => x.Theme.ThemeID == theme.ThemeID).Any())
+                        {
+                            Result = new DBResult
+                            {
+                                result = true,
+                                message = WrapperTranslation.GetValue("").ToString() // Error, tema en uso
+                            };
+                        }
+                        else
+                        {
+                            Result = new DBResult
+                            {
+                                result = false,
+                                message = WrapperTranslation.GetValue("").ToString() // tema sin uso
+                            };
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Result = new DBResult
+                {
+                    result = true,
+                    message = e.Message
+                };
+            }
 
             return Result;
         }
 
 
+        public static IEnumerable<Theme> GetThemesByCurrentUser()
+        {
+            using (var db = new TestExamsContext())
+            {
+                return db.Themes.Where(x => x.Subjet.User.UserID == GetCurrentUser().UserID);
+            }
+        }
+
+        #endregion
+
+        // TODO translates
+        #region Questions
+
+        /// <summary>
+        /// Añade una pregunta a la base de datos.
+        /// Comprueba que no esté repetida.
+        /// </summary>
+        /// <param name="question"> Objeto DB.question</param>
+        /// <returns>
+        /// objeto DBResult {bool result , string message}
+        /// DBResult.result = true => Accion correcta
+        /// DBResult.result = false => Accion incorrecta
+        /// </returns>
+        public static DBResult addQuestion(Question question)
+        {
+            DBResult Result = null;
+
+            try
+            {
+                using (var db = new TestExamsContext())
+                {
+                    if (db.Questions.Select(x => x.QuestionText == question.QuestionText && x.Theme.ThemeID == question.Theme.ThemeID).Any())
+                    {
+                        Result = new DBResult
+                        {
+                            result = false,
+                            message = WrapperTranslation.GetValue("").ToString()// Error, Pregunta repetida
+                        };
+                    }
+                    else
+                    {
+
+                        db.Questions.Add(question);
+                        db.SaveChanges();
+                        Result = new DBResult
+                        {
+                            result = true,
+                            message = WrapperTranslation.GetValue("").ToString()// Pregunta añadida correctamente
+                        };
+
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Result = new DBResult
+                {
+                    result = false,
+                    message = e.Message
+                };
+            }
+
+            return Result;
+        }
+
+        /// <summary>
+        /// Borra un tema de la base de datos.
+        /// Comprueba la existencia.
+        /// </summary>
+        /// <param name="user"> Objeto DB.theme</param>
+        /// <returns>
+        /// objeto DBResult {bool result , string message}
+        /// DBResult.result = true => Borrado correctamente
+        /// DBResult.result = false => No se pudo borrar
+        /// </returns>
+        public static DBResult RemoveQuestion(Question question)
+        {
+            DBResult res = null;
+
+            try
+            {
+                using (var db = new TestExamsContext())
+                {
+                    if (!db.Questions.Select(x => x.QuestionID == question.QuestionID).Any())
+                    {
+                        res = new DBResult
+                        {
+                            result = false,
+                            message = WrapperTranslation.GetValue("").ToString()// Error, la pregunta no existe
+                        };
+                    }
+                    else
+                    {
+                        db.Questions.Remove(question);
+                        db.SaveChanges();
+                        res = new DBResult
+                        {
+                            result = true,
+                            message = WrapperTranslation.GetValue("").ToString()//Pregunta borrada correctamente
+                        };
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                res = new DBResult
+                {
+                    result = false,
+                    message = e.Message
+                };
+            }
+
+            return res;
+        }
+
+        /// <summary>
+        /// Comprueba si el tema está en uso
+        /// </summary>
+        /// <param name="user">Objeto DB.theme</param>
+        /// <returns>        
+        /// objeto DBResult {bool result , string message}
+        /// DBResult.result = true => usuario en uso
+        /// DBResult.result = false => usuario sin uso
+        /// </returns>
+        public static DBResult IsUsed(Question question)
+        {
+            DBResult Result = null;
+
+            try
+            {
+                using (var db = new TestExamsContext())
+                {
+                    if (!db.Questions.Select(x => x.QuestionID == question.QuestionID).Any())
+                    {
+                        Result = new DBResult
+                        {
+                            result = true,
+                            message = WrapperTranslation.GetValue("").ToString()// Error, la pregunta no existe
+                        };
+                    }
+                    else
+                    {
+                        if (db.Answers.Select(x => x.Question.QuestionID == question.QuestionID).Any()
+                            || db.ExamQuestions.Select(x => x.Question.QuestionID == question.QuestionID).Any())
+                        {
+                            Result = new DBResult
+                            {
+                                result = true,
+                                message = WrapperTranslation.GetValue("").ToString() // Error, pregunta en uso
+                            };
+                        }
+                        else
+                        {
+                            Result = new DBResult
+                            {
+                                result = false,
+                                message = WrapperTranslation.GetValue("").ToString() // pregunta sin uso
+                            };
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Result = new DBResult
+                {
+                    result = true,
+                    message = e.Message
+                };
+            }
+
+            return Result;
+        }
+
+        public static IEnumerable<Question> GetQuestionByTheme(Theme theme)
+        {
+            using (var db = new TestExamsContext())
+            {
+                return db.Questions.Where(x => x.Theme.ThemeID == theme.ThemeID);
+            }
+        }
+
+
+        public static IEnumerable<Question> GetQuestionBySubjet(Subject subject)
+        {
+            using (var db = new TestExamsContext())
+            {
+                return db.Questions.Where(x => x.Theme.Subjet.SubjectID == subject.SubjectID);
+            }
+        }
+
+        #endregion
+
+        #region Answers
+        #endregion
+
+        #region Exams
+        #endregion
+
+        #region Examquestions
         #endregion
     }
 }

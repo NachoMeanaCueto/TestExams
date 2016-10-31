@@ -189,6 +189,12 @@
   <data name="Error_SubjetInUse" xml:space="preserve">
     <value>La asignatura está siendo usada</value>
   </data>
+  <data name="Error_ThemeNotFound" xml:space="preserve">
+    <value>Error, el tema no existe</value>
+  </data>
+  <data name="Message_RemoveThemeOk" xml:space="preserve">
+    <value>El tema se ha borrado correctamente</value>
+  </data>
   <data name="Message_SubjetNotInUse" xml:space="preserve">
     <value>La asignatura no está en uso</value>
   </data>

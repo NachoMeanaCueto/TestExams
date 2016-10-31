@@ -18,24 +18,7 @@ namespace TestExams
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            using (var db = new DBModel.TestExamsContext())
-            {
-                var appMail = db.AppMails.Count();
-
-                if (appMail == 0)
-                {
-                    db.AppMails.Add(new DBModel.AppMail
-                    {
-                        AppMailID = 1,
-                        Host = "smtp.gmail.com",
-                        port = 25,
-                        MailAddress = "textexams@gmail.com",
-                        Password = "dABlAHgAdABlAHgAYQBtAHMAQQBkAG0AaQBuACEAMQAyADMANAA="
-                    });
-
-                    db.SaveChanges();
-                }
-            }
+            DBManager.DBManager.SetAppMail();
         }
     }
 }

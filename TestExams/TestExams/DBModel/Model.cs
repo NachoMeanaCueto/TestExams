@@ -19,6 +19,7 @@ namespace TestExams.DBModel
         public DbSet<AppMail> AppMails { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<ExamQuestions> ExamQuestions { get; set; }
+        public DbSet<ExamType> ExamTypes { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -63,10 +64,17 @@ namespace TestExams.DBModel
             modelBuilder.Entity<AppMail>().Property(x => x.port).IsRequired();
 
             modelBuilder.Entity<Exam>().HasKey(x => x.ExamID);
-            modelBuilder.Entity<Exam>().HasOne(x => x.User).WithMany().OnDelete(DeleteBehavior.Cascade); 
+            modelBuilder.Entity<Exam>().HasOne(x => x.User).WithMany().OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Exam>().HasOne(x => x.ExamType).WithMany().OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<ExamQuestions>().HasKey(x => x.ExamQuestionID);
             modelBuilder.Entity<ExamQuestions>().HasOne(x => x.Exam).WithMany().OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ExamType>().HasKey(x => x.ExamTypeID);
+            modelBuilder.Entity<ExamType>().Property(x => x.Code).IsRequired();
+            modelBuilder.Entity<ExamType>().Property(x => x.Name).IsRequired();
+            modelBuilder.Entity<ExamType>().HasOne(x => x.User).WithMany().OnDelete(DeleteBehavior.Cascade);
+            
         }
 
         

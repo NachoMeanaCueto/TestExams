@@ -60,9 +60,13 @@ namespace TestExams.Migrations
                     b.Property<int>("ExamID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int?>("ExamTypeID");
+
                     b.Property<int?>("UserID");
 
                     b.HasKey("ExamID");
+
+                    b.HasIndex("ExamTypeID");
 
                     b.HasIndex("UserID");
 
@@ -87,6 +91,26 @@ namespace TestExams.Migrations
                     b.HasIndex("QuestionID");
 
                     b.ToTable("ExamQuestions");
+                });
+
+            modelBuilder.Entity("TestExams.DBModel.ExamType", b =>
+                {
+                    b.Property<int>("ExamTypeID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Code")
+                        .IsRequired();
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.Property<int?>("UserID");
+
+                    b.HasKey("ExamTypeID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("ExamTypes");
                 });
 
             modelBuilder.Entity("TestExams.DBModel.Question", b =>
@@ -171,6 +195,11 @@ namespace TestExams.Migrations
 
             modelBuilder.Entity("TestExams.DBModel.Exam", b =>
                 {
+                    b.HasOne("TestExams.DBModel.ExamType", "ExamType")
+                        .WithMany()
+                        .HasForeignKey("ExamTypeID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("TestExams.DBModel.User", "User")
                         .WithMany()
                         .HasForeignKey("UserID")
@@ -187,6 +216,14 @@ namespace TestExams.Migrations
                     b.HasOne("TestExams.DBModel.Question", "Question")
                         .WithMany()
                         .HasForeignKey("QuestionID");
+                });
+
+            modelBuilder.Entity("TestExams.DBModel.ExamType", b =>
+                {
+                    b.HasOne("TestExams.DBModel.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("TestExams.DBModel.Question", b =>

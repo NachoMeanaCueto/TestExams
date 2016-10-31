@@ -41,18 +41,20 @@ namespace TestExams.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Exams",
+                name: "ExamTypes",
                 columns: table => new
                 {
-                    ExamID = table.Column<int>(nullable: false)
+                    ExamTypeID = table.Column<int>(nullable: false)
                         .Annotation("Autoincrement", true),
-                    UserID = table.Column<int>(nullable: false)
+                    Code = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    UserID = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Exams", x => x.ExamID);
+                    table.PrimaryKey("PK_ExamTypes", x => x.ExamTypeID);
                     table.ForeignKey(
-                        name: "FK_Exams_Users_UserID",
+                        name: "FK_ExamTypes_Users_UserID",
                         column: x => x.UserID,
                         principalTable: "Users",
                         principalColumn: "UserID",
@@ -73,6 +75,32 @@ namespace TestExams.Migrations
                     table.PrimaryKey("PK_Subjects", x => x.SubjectID);
                     table.ForeignKey(
                         name: "FK_Subjects_Users_UserID",
+                        column: x => x.UserID,
+                        principalTable: "Users",
+                        principalColumn: "UserID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Exams",
+                columns: table => new
+                {
+                    ExamID = table.Column<int>(nullable: false)
+                        .Annotation("Autoincrement", true),
+                    ExamTypeID = table.Column<int>(nullable: false),
+                    UserID = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Exams", x => x.ExamID);
+                    table.ForeignKey(
+                        name: "FK_Exams_ExamTypes_ExamTypeID",
+                        column: x => x.ExamTypeID,
+                        principalTable: "ExamTypes",
+                        principalColumn: "ExamTypeID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Exams_Users_UserID",
                         column: x => x.UserID,
                         principalTable: "Users",
                         principalColumn: "UserID",
@@ -173,6 +201,11 @@ namespace TestExams.Migrations
                 column: "QuestionID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Exams_ExamTypeID",
+                table: "Exams",
+                column: "ExamTypeID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Exams_UserID",
                 table: "Exams",
                 column: "UserID");
@@ -186,6 +219,11 @@ namespace TestExams.Migrations
                 name: "IX_ExamQuestions_QuestionID",
                 table: "ExamQuestions",
                 column: "QuestionID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExamTypes_UserID",
+                table: "ExamTypes",
+                column: "UserID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Questions_ThemeID",
@@ -219,6 +257,9 @@ namespace TestExams.Migrations
 
             migrationBuilder.DropTable(
                 name: "Questions");
+
+            migrationBuilder.DropTable(
+                name: "ExamTypes");
 
             migrationBuilder.DropTable(
                 name: "Themes");

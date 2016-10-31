@@ -133,6 +133,15 @@ namespace TestExams.Translation {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Error, el tema no existe.
+        /// </summary>
+        public static string Error_ThemeNotFound {
+            get {
+                return ResourceManager.GetString("Error_ThemeNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Error, existe un tema con el mismo nombre..
         /// </summary>
         public static string Error_ThemeRepeat {
@@ -228,6 +237,15 @@ namespace TestExams.Translation {
         public static string Message_RemoveSubjetOk {
             get {
                 return ResourceManager.GetString("Message_RemoveSubjetOk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El tema se ha borrado correctamente.
+        /// </summary>
+        public static string Message_RemoveThemeOk {
+            get {
+                return ResourceManager.GetString("Message_RemoveThemeOk", resourceCulture);
             }
         }
         

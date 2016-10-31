@@ -12,6 +12,8 @@ namespace TestExams.DBModel
         
         public virtual User User { get; set; }
 
+        public virtual ExamType ExamType { get; set; }
+
 
     }
 }
