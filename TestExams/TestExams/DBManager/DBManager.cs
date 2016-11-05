@@ -749,7 +749,7 @@ namespace TestExams.DBManager
         }
 
         /// <summary>
-        /// Borra un tema de la base de datos.
+        /// Borra una pregunta de la base de datos.
         /// Comprueba la existencia.
         /// </summary>
         /// <param name="user"> Objeto DB.theme</param>
@@ -799,13 +799,13 @@ namespace TestExams.DBManager
         }
 
         /// <summary>
-        /// Comprueba si el tema está en uso
+        /// Comprueba si la pregunta está en uso
         /// </summary>
-        /// <param name="user">Objeto DB.theme</param>
+        /// <param name="user">Objeto DB.Question</param>
         /// <returns>        
         /// objeto DBResult {bool result , string message}
-        /// DBResult.result = true => usuario en uso
-        /// DBResult.result = false => usuario sin uso
+        /// DBResult.result = true => en uso
+        /// DBResult.result = false => sin uso
         /// </returns>
         public static DBResult IsUsed(Question question)
         {
@@ -876,13 +876,406 @@ namespace TestExams.DBManager
 
         #endregion
 
+        //TODO translates
         #region Answers
+
+        /// <summary>
+        /// Añade una respuesta a la base de datos.
+        /// Comprueba que no esté repetida.
+        /// </summary>
+        /// <param name="answer"> Objeto DB.Answer</param>
+        /// <returns>
+        /// objeto DBResult {bool result , string message}
+        /// DBResult.result = true => Accion correcta
+        /// DBResult.result = false => Accion incorrecta
+        /// </returns>
+        public static DBResult addAnswer(Answer answer)
+        {
+            DBResult Result = null;
+
+            try
+            {
+                using (var db = new TestExamsContext())
+                {
+                    if (db.Answers.Select(x => x.AnswerText == answer.AnswerText && x.Question.QuestionID == answer.Question.QuestionID).Any())
+                    {
+                        Result = new DBResult
+                        {
+                            result = false,
+                            message = WrapperTranslation.GetValue("").ToString()// Error, Respuesta repetida
+                        };
+                    }
+                    else
+                    {
+
+                        db.Answers.Add(answer);
+                        db.SaveChanges();
+                        Result = new DBResult
+                        {
+                            result = true,
+                            message = WrapperTranslation.GetValue("").ToString()// Respuesta añadida correctamente
+                        };
+
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Result = new DBResult
+                {
+                    result = false,
+                    message = e.Message
+                };
+            }
+
+            return Result;
+        }
+
+        /// <summary>
+        /// Borra una respuesta de la base de datos.
+        /// Comprueba la existencia.
+        /// </summary>
+        /// <param name="answer"> Objeto DB.Answer</param>
+        /// <returns>
+        /// objeto DBResult {bool result , string message}
+        /// DBResult.result = true => Borrado correctamente
+        /// DBResult.result = false => No se pudo borrar
+        /// </returns>
+        public static DBResult RemoveAnswer(Answer answer)
+        {
+            DBResult res = null;
+
+            try
+            {
+                using (var db = new TestExamsContext())
+                {
+                    if (!db.Answers.Select(x => x.AnswerId == answer.AnswerId).Any())
+                    {
+                        res = new DBResult
+                        {
+                            result = false,
+                            message = WrapperTranslation.GetValue("").ToString()// Error, la respuesta no existe
+                        };
+                    }
+                    else
+                    {
+                        db.Answers.Remove(answer);
+                        db.SaveChanges();
+                        res = new DBResult
+                        {
+                            result = true,
+                            message = WrapperTranslation.GetValue("").ToString()//Respuesta borrada correctamente
+                        };
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                res = new DBResult
+                {
+                    result = false,
+                    message = e.Message
+                };
+            }
+
+            return res;
+        }
+
+        /// <summary>
+        /// Comprueba si la respuesta está en uso
+        /// </summary>
+        /// <param name="answer">Objeto DB.Answer</param>
+        /// <returns>        
+        /// objeto DBResult {bool result , string message}
+        /// DBResult.result = true => en uso
+        /// DBResult.result = false => sin uso
+        /// </returns>
+        public static DBResult IsUsed(Answer answer)
+        {
+            DBResult Result = null;
+
+            try
+            {
+                using (var db = new TestExamsContext())
+                {
+                    if (!db.Answers.Select(x => x.AnswerId == answer.AnswerId).Any())
+                    {
+                        Result = new DBResult
+                        {
+                            result = true,
+                            message = WrapperTranslation.GetValue("").ToString()// Error, la respuesta no existe
+                        };
+                    }
+                    else
+                    {
+                        if (db.Questions.Select(x => x.QuestionID == answer.Question.QuestionID).Any())
+                        {
+                            Result = new DBResult
+                            {
+                                result = true,
+                                message = WrapperTranslation.GetValue("").ToString() // Error, respuesta en uso
+                            };
+                        }
+                        else
+                        {
+                            Result = new DBResult
+                            {
+                                result = false,
+                                message = WrapperTranslation.GetValue("").ToString() // respuesta sin uso
+                            };
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Result = new DBResult
+                {
+                    result = true,
+                    message = e.Message
+                };
+            }
+
+            return Result;
+        }
+
+        /// <summary>
+        /// Devuelve las respuestas a una pregunta
+        /// </summary>
+        /// <param name="question"></param>
+        /// <returns></returns>
+        public static IEnumerable<Answer> GetAnswersByQuestion(Question question)
+        {
+            using (var db = new TestExamsContext())
+            {
+                return db.Answers.Where(x => x.Question.QuestionID == question.QuestionID);
+            }
+        }
         #endregion
 
+        //TODO translates
         #region Exams
+
+        /// <summary>
+        /// Añade un examen a la base de datos.
+        /// </summary>
+        /// <param name="exam"> Objeto DB.Exam</param>
+        /// <returns>
+        /// objeto DBResult {bool result , string message}
+        /// DBResult.result = true => Accion correcta
+        /// DBResult.result = false => Accion incorrecta
+        /// </returns>
+        public static DBResult addExam(Exam exam)
+        {
+            DBResult Result = null;
+
+            try
+            {
+                using (var db = new TestExamsContext())
+                {
+                    
+                    db.Exams.Add(exam);
+                    db.SaveChanges();
+                    Result = new DBResult
+                    {
+                        result = true,
+                        message = WrapperTranslation.GetValue("").ToString()// examen añadido correctamente
+                    };
+
+                }
+            }
+            catch (Exception e)
+            {
+                Result = new DBResult
+                {
+                    result = false,
+                    message = e.Message
+                };
+            }
+
+            return Result;
+        }
+
+        /// <summary>
+        /// Borra un examen de la base de datos.
+        /// Comprueba la existencia.
+        /// </summary>
+        /// <param name="exam"> Objeto DB.Exam</param>
+        /// <returns>
+        /// objeto DBResult {bool result , string message}
+        /// DBResult.result = true => Borrado correctamente
+        /// DBResult.result = false => No se pudo borrar
+        /// </returns>
+        public static DBResult RemoveExam(Exam exam)
+        {
+            DBResult res = null;
+
+            try
+            {
+                using (var db = new TestExamsContext())
+                {
+                    if (!db.Exams.Select(x => x.ExamID == exam.ExamID && x.User.UserID == exam.User.UserID).Any())
+                    {
+                        res = new DBResult
+                        {
+                            result = false,
+                            message = WrapperTranslation.GetValue("").ToString()// Error, el examen no existe
+                        };
+                    }
+                    else
+                    {
+                        db.Exams.Remove(exam);
+                        db.SaveChanges();
+                        res = new DBResult
+                        {
+                            result = true,
+                            message = WrapperTranslation.GetValue("").ToString()//Respuesta borrada correctamente
+                        };
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                res = new DBResult
+                {
+                    result = false,
+                    message = e.Message
+                };
+            }
+
+            return res;
+        }
+
+        /// <summary>
+        /// Comprueba si la respuesta está en uso
+        /// </summary>
+        /// <param name="exam">Objeto DB.Answer</param>
+        /// <returns>        
+        /// objeto DBResult {bool result , string message}
+        /// DBResult.result = true => en uso
+        /// DBResult.result = false => sin uso
+        /// </returns>
+        public static DBResult IsUsed(Exam exam)
+        {
+            DBResult Result = null;
+
+            try
+            {
+                using (var db = new TestExamsContext())
+                {
+                    if (!db.Exams.Select(x => x.ExamID == exam.ExamID && x.User.UserID == exam.User.UserID).Any())
+                    {
+                        Result = new DBResult
+                        {
+                            result = true,
+                            message = WrapperTranslation.GetValue("").ToString()// Error, el examen no existe
+                        };
+                    }
+                    else
+                    {
+                        if (db.ExamQuestions.Select(x => x.Exam.ExamID == exam.ExamID).Any())
+                        {
+                            Result = new DBResult
+                            {
+                                result = true,
+                                message = WrapperTranslation.GetValue("").ToString() // Error, examen en uso
+                            };
+                        }
+                        else
+                        {
+                            Result = new DBResult
+                            {
+                                result = false,
+                                message = WrapperTranslation.GetValue("").ToString() // respuesta sin uso
+                            };
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Result = new DBResult
+                {
+                    result = true,
+                    message = e.Message
+                };
+            }
+
+            return Result;
+        }
+
+        /// <summary>
+        /// Devuelve los examenes del usuario en sesión
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<Exam> GetAllExamsByCurrentUser()
+        {
+            using (var db = new TestExamsContext())
+            {
+                return db.Exams.Where(x => x.User.UserID == GetCurrentUser().UserID);
+            }
+        }
+
+
+        /// <summary>
+        /// Devuelve los examenes del usuario en sesión de un tema concreto
+        /// </summary>
+        /// <param name="question"></param>
+        /// <returns></returns>
+        public static IEnumerable<Exam> GetThemeExamsByCurrentUser(Theme theme)
+        {
+            using (var db = new TestExamsContext())
+            {
+                var QuestionsByTheme = db.Questions.Where(y => y.Theme.ThemeID == theme.ThemeID)
+                    .Select(z => z.QuestionID);
+
+                var examquestionsByTheme = (from examquestions in db.ExamQuestions
+                                            where (QuestionsByTheme.Contains(examquestions.Question.QuestionID))
+                                            select examquestions.Exam.ExamID);
+
+                var themeExamsByUser = from themeExams in GetAllExamsByCurrentUser()
+                                       where (examquestionsByTheme.Contains(themeExams.ExamID))
+                                       select themeExams;
+
+                return themeExamsByUser;
+            }
+        }
+
+
+        /// <summary>
+        /// Devuelve los examenes del usuario en sesión de una asignatura concreta
+        /// </summary>
+        /// <param name="question"></param>
+        /// <returns></returns>
+        public static IEnumerable<Exam> GetSubjetExamsByCurrentUser(Subject subjet)
+        {
+            using (var db = new TestExamsContext())
+            {
+                var ThemesBySubjet = db.Themes.Where(x => x.Subjet.SubjectID == subjet.SubjectID)
+                                    .Select(x => x.ThemeID);
+
+                var QuestionsBySubjet = (from questions in db.Questions
+                                         where (ThemesBySubjet.Contains(questions.Theme.ThemeID))
+                                         select questions.QuestionID);
+
+                var examquestionsByTheme = (from examquestions in db.ExamQuestions
+                                            where (QuestionsBySubjet.Contains(examquestions.Question.QuestionID))
+                                            select examquestions.Exam.ExamID);
+
+                var SubjetExamsByUser = from themeExams in GetAllExamsByCurrentUser()
+                                       where (examquestionsByTheme.Contains(themeExams.ExamID))
+                                       select themeExams;
+
+                return SubjetExamsByUser;
+            }
+        }
+
         #endregion
 
         #region Examquestions
+        #endregion
+
+        #region ExamTypes
         #endregion
     }
 }
