@@ -1272,7 +1272,179 @@ namespace TestExams.DBManager
 
         #endregion
 
+        //TODO translates
         #region Examquestions
+
+        /// <summary>
+        /// Añade un vinculo entre examen y pregunta a la base de datos.
+        /// Comprueba que no esté repetida.
+        /// </summary>
+        /// <param name="question"> Objeto DB.ExamQuestions</param>
+        /// <returns>
+        /// objeto DBResult {bool result , string message}
+        /// DBResult.result = true => Accion correcta
+        /// DBResult.result = false => Accion incorrecta
+        /// </returns>
+        public static DBResult addExamQuestion(ExamQuestions examQuestion)
+        {
+            DBResult Result = null;
+
+            try
+            {
+                using (var db = new TestExamsContext())
+                {
+                    if (db.ExamQuestions.Select(x => x.Exam.ExamID == examQuestion.Exam.ExamID
+                        && x.Question.QuestionID == examQuestion.Question.QuestionID).Any())
+                    {
+                        Result = new DBResult
+                        {
+                            result = false,
+                            message = WrapperTranslation.GetValue("").ToString()// Error, Pregunta repetida
+                        };
+                    }
+                    else
+                    {
+
+                        db.ExamQuestions.Add(examQuestion);
+                        db.SaveChanges();
+                        Result = new DBResult
+                        {
+                            result = true,
+                            message = WrapperTranslation.GetValue("").ToString()// Pregunta añadida correctamente
+                        };
+
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Result = new DBResult
+                {
+                    result = false,
+                    message = e.Message
+                };
+            }
+
+            return Result;
+        }
+
+        /// <summary>
+        /// Borra un vinculo entre examen y pregunta de la base de datos.
+        /// Comprueba la existencia.
+        /// </summary>
+        /// <param name="user"> Objeto DB.ExamQuestions</param>
+        /// <returns>
+        /// objeto DBResult {bool result , string message}
+        /// DBResult.result = true => Borrado correctamente
+        /// DBResult.result = false => No se pudo borrar
+        /// </returns>
+        public static DBResult RemoveExamQuestion(ExamQuestions examQuestion)
+        {
+            DBResult res = null;
+
+            try
+            {
+                using (var db = new TestExamsContext())
+                {
+                    if (!db.ExamQuestions.Select(x => x.ExamQuestionID == examQuestion.ExamQuestionID).Any())
+                    {
+                        res = new DBResult
+                        {
+                            result = false,
+                            message = WrapperTranslation.GetValue("").ToString()// Error, la pregunta no existe
+                        };
+                    }
+                    else
+                    {
+                        db.ExamQuestions.Remove(examQuestion);
+                        db.SaveChanges();
+                        res = new DBResult
+                        {
+                            result = true,
+                            message = WrapperTranslation.GetValue("").ToString()//Pregunta borrada correctamente
+                        };
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                res = new DBResult
+                {
+                    result = false,
+                    message = e.Message
+                };
+            }
+
+            return res;
+        }
+
+        /// <summary>
+        /// Comprueba si la pregunta está en uso
+        /// </summary>
+        /// <param name="user">Objeto DB.Question</param>
+        /// <returns>        
+        /// objeto DBResult {bool result , string message}
+        /// DBResult.result = true => en uso
+        /// DBResult.result = false => sin uso
+        /// </returns>
+        public static DBResult IsUsed(ExamQuestions examQuestion)
+        {
+            DBResult Result = null;
+
+            try
+            {
+                using (var db = new TestExamsContext())
+                {
+                    if (!db.ExamQuestions.Select(x => x.ExamQuestionID == examQuestion.ExamQuestionID).Any())
+                    {
+                        Result = new DBResult
+                        {
+                            result = true,
+                            message = WrapperTranslation.GetValue("").ToString()// Error, la pregunta no existe
+                        };
+                    }
+                    else
+                    {
+                        if (db.Exams.Select(x => x.ExamID == examQuestion.Exam.ExamID).Any()
+                            || db.Questions.Select(x => x.QuestionID == examQuestion.Question.QuestionID).Any())
+                        {
+                            Result = new DBResult
+                            {
+                                result = true,
+                                message = WrapperTranslation.GetValue("").ToString() // Error, pregunta en uso
+                            };
+                        }
+                        else
+                        {
+                            Result = new DBResult
+                            {
+                                result = false,
+                                message = WrapperTranslation.GetValue("").ToString() // pregunta sin uso
+                            };
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Result = new DBResult
+                {
+                    result = true,
+                    message = e.Message
+                };
+            }
+
+            return Result;
+        }
+
+        public static IEnumerable<ExamQuestions> GetExamQuestionsByExam(Exam exam)
+        {
+            using (var db = new TestExamsContext())
+            {
+                return db.ExamQuestions.Where(x => x.Exam.ExamID == exam.ExamID);
+            }
+        }
+
         #endregion
 
         #region ExamTypes
