@@ -198,4 +198,7 @@
   <data name="Message_SubjetNotInUse" xml:space="preserve">
     <value>La asignatura no está en uso</value>
   </data>
+  <data name="Lab_CurrentUser" xml:space="preserve">
+    <value>Usuario: </value>
+  </data>
 </root>

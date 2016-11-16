@@ -184,6 +184,9 @@
     <Compile Include="Controls\AddSubjet.xaml.cs">
       <DependentUpon>AddSubjet.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\AddTheme.xaml.cs">
+      <DependentUpon>AddTheme.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DBManager\DBManager.cs" />
     <Compile Include="DBManager\DBResult.cs" />
     <Compile Include="DBModel\AppMail.cs" />
@@ -212,6 +215,10 @@
     <Compile Include="UsersGestion\PassGenerator.cs" />
     <Compile Include="UsersGestion\PassGestion.cs" />
     <Page Include="Controls\AddSubjet.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\AddTheme.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

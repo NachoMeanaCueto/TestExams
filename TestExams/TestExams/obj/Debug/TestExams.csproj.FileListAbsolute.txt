@@ -168,3 +168,5 @@ C:\Users\Nacho\Documents\GitHub\TestExams\TestExams\TestExams\obj\Debug\TestExam
 C:\Users\Nacho\Documents\GitHub\TestExams\TestExams\TestExams\obj\Debug\TestExams.Translation.Translation.ast-ES.resources
 C:\Users\Nacho\Documents\GitHub\TestExams\TestExams\TestExams\obj\Debug\TestExams.csproj.GenerateResource.Cache
 C:\Users\Nacho\Documents\GitHub\TestExams\TestExams\TestExams\obj\Debug\ast-ES\TestExams.resources.dll
+C:\Users\Nacho\Documents\GitHub\TestExams\TestExams\TestExams\obj\Debug\Controls\AddTheme.g.cs
+C:\Users\Nacho\Documents\GitHub\TestExams\TestExams\TestExams\obj\Debug\Controls\AddTheme.baml

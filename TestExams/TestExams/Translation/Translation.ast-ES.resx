@@ -201,4 +201,7 @@
   <data name="Message_SubjetNotInUse" xml:space="preserve">
     <value>l'asignatura nun ta n'usu</value>
   </data>
+  <data name="Lab_CurrentUser" xml:space="preserve">
+    <value>Usuariu: </value>
+  </data>
 </root>

@@ -51,28 +51,6 @@ namespace TestExams
 
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            AddSubjet addsubjet = new AddSubjet
-            {
-                lab_TitleText = "Añadir asignatura",
-                Tbx_SubjetWaterMark = "Introduzca una asaignatura....",
-                Btn_AcceptText = "Aceptar",
-                Btn_CancelText = "Cancelar"
-            };
-
-            MainGrid.Children.Clear();
-            MainGrid.Children.Add(addsubjet);
-            
-            CustomValidationPopup po = new CustomValidationPopup();
-           
-            po.Child = new Label { Content = "pop", Foreground = Brushes.White, Background = Brushes.Red};
-            po.VerticalOffset = 500;
-            po.HorizontalOffset = 500; 
-            po.IsOpen = true;
-        }
-
-
 
         private void añadirAsig(object sender, RoutedEventArgs e)
         {

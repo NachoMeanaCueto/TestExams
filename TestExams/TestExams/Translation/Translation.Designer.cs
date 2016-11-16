@@ -178,6 +178,15 @@ namespace TestExams.Translation {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Usuario: .
+        /// </summary>
+        public static string Lab_CurrentUser {
+            get {
+                return ResourceManager.GetString("Lab_CurrentUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Configuración de idioma.
         /// </summary>
         public static string Lab_LenguajeSettings {

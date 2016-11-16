@@ -77,8 +77,13 @@
             </Controls:Flyout>
         </Controls:FlyoutsControl>
     </Controls:MetroWindow.Flyouts>
-    <Grid Name="MainGrid">
-        <Button Click="Button_Click">add</Button>
-
+    <Grid>
+        <StackPanel  Orientation="Horizontal" HorizontalAlignment="Right">
+            <Label FontSize="15" HorizontalAlignment="Right" Margin="0 0 5 0" 
+                   Content="{Binding Lab_CurrentUser, Source={StaticResource TranslationRes}}"></Label>
+            <Label Name="LabUser" FontSize="15"></Label>
+        </StackPanel>
+        <Grid Name="MainGrid" Margin="5 35 5 5">
+        </Grid>
     </Grid>
 </Controls:MetroWindow>

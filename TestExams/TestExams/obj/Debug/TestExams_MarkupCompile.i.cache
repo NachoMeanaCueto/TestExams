@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\Nacho\Documents\GitHub\TestExams\TestExams\TestExams\App.xaml
-4-1271557944
+51854119998
 21783987331
-321475845265
+33341421150
 100-302873207
-Controls\AddSubjet.xaml;MainWindow.xaml;Resources\Icons.xaml;Resources\IconsNonShared.xaml;
+Controls\AddSubjet.xaml;Controls\AddTheme.xaml;MainWindow.xaml;Resources\Icons.xaml;Resources\IconsNonShared.xaml;
 
-False
+True
 
